@@ -11,7 +11,7 @@ def initialize():
     separateur = "/"
     images = {"textinput": "data"+separateur+"input.png"}
     hud = HUD()
-    jeu = Connexion()
+    jeu = Coeur()
     mode = "DEV"
     hauteur_dev = 1334
     largeur_dev = 750
