@@ -8,7 +8,7 @@ from kivy.core.text import Label as CoreLabel
 from kivymd.app import MDApp
 
 import globals
-import connexions
+#import connexions
 
 
 class TextInput():
@@ -102,10 +102,6 @@ class HUD:
     def recoordonner(self, tupl):
         return int((tupl[0] / 1000) * self.longueur), int((tupl[1] / 1000) * self.largeur)
 
-    def recoordonner_proportionne(self, tupl):
-    globals.longueur_dev, globals.largeur_dev
-        return int((tupl[0] / 1000) * self.longueur), int((tupl[1] / 1000) * self.largeur)
-
     def recoordonner_double(self, tupl):
         return int((tupl[0] / 1000) * self.longueur), int((tupl[1] / 1000) * self.largeur), int((tupl[2] / 1000) * self.longueur), int((tupl[3] / 1000) * self.largeur)
 
@@ -124,7 +120,7 @@ class HUD:
 
     def image(self, x, y, tx, ty, image, remove=True):
         texture = Image(source=image).texture
-        rec = Rectangle(size=globals.hud.recoordonner_proportionne((tx, ty)), pos=self.recoordonner((x - (tx//2), y - (ty//2))), texture=texture)
+        rec = Rectangle(size=globals.hud.recoordonner((tx, ty)), pos=self.recoordonner((x - (tx//2), y - (ty//2))), texture=texture)
         layout.canvas.add(rec)
         if remove:
             def rmv(dt):
