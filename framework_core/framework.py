@@ -6,6 +6,7 @@ from kivy.uix.image import Image
 from kivy.graphics import Rectangle
 from kivy.core.text import Label as CoreLabel
 from kivymd.app import MDApp
+from kivy.uix.widget import Widget
 
 import globals
 #import connexions
