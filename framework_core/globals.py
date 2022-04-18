@@ -1,7 +1,7 @@
 __author__ = "reza0310"
 
 def initialize():
-    global IP, PORT, HEADER_LENGTH, images, hud, jeu, FPS, separateur, mode, orientation, hauteur_dev, largeur_dev
+    global IP, PORT, HEADER_LENGTH, images, hud, jeu, FPS, separateur, mode, orientation, longueur_dev, largeur_dev
     from framework import HUD
     from PROJET import Coeur
     IP = "127.0.0.1"
