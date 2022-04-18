@@ -9,4 +9,7 @@ import globals
 import framework
 
 
+class Struct():
 
+    def __init__(self):
+        pass
