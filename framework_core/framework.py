@@ -92,7 +92,6 @@ class HUD:
                     self.boutons.remove(bouton)
 
     def press(self, touch):
-        from structures import Evenement, Menu
         for bouton in self.boutons:
             if bouton["x"][0] < touch.spos[0]*1000 < bouton["x"][1] and bouton["y"][0] < touch.spos[1]*1000 < bouton["y"][1]:
                 print(bouton["action"])
