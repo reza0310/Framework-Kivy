@@ -6,7 +6,6 @@ import time
 import os
 
 import globals
-import connexions
 import framework
 
 
