@@ -42,7 +42,6 @@ class TextInput():
 
     def focus(self):
         global layout
-        print("FOCUS!!!")
         self.clavier = Window.request_keyboard(self.unfocus, layout, 'text')
         self.clavier.bind(on_key_down=self.press)
 
@@ -94,7 +93,6 @@ class HUD:
     def press(self, touch):
         for bouton in self.boutons:
             if bouton["x"][0] < touch.spos[0]*1000 < bouton["x"][1] and bouton["y"][0] < touch.spos[1]*1000 < bouton["y"][1]:
-                print(bouton["action"])
                 eval(bouton["action"])  # Handle joysticks
                 return True
         return False
