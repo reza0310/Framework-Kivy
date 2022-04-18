@@ -13,6 +13,6 @@ def initialize():
     hud = HUD()
     jeu = Coeur()
     mode = "DEV"
-    hauteur_dev = 1334
+    longueur_dev = 1334
     largeur_dev = 750
     orientation = "portrait"
