@@ -4,7 +4,7 @@ from kivy.clock import Clock
 
 from random import randint
 
-from connexions import echanger, recevoir
+#from connexions import echanger, recevoir
 from structures import Struct
 import framework
 import globals
