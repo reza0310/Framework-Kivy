@@ -1,0 +1,7 @@
+Auteur de la fonction get_ip(): fatal_error
+Profil StackOverflow: https://stackoverflow.com/users/1301627/fatal-error
+Emplacement du code: https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib#answer-28950776
+
+Auteur du serveur de base: sentdex
+Profil Youtube: https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ
+Emplacement du code: https://pythonprogramming.net/server-chatroom-sockets-tutorial-python-3/
