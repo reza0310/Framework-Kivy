@@ -50,12 +50,114 @@ class TextInput():
         self.clavier = None
 
     def press(self, clavier, code, texte, modificateurs):
-        if code[0] == 8:
+        #print(code, texte, modificateurs)
+        if code[0] in [303, 304, 308, 301, 307, 305]:  # rshift, shift, alt, capslock, alt-gr, lctrl
+            pass
+        elif code[0] == 8:
             self.text = self.text[:-1]
+        elif code[0] == 13:
+            self.sent = True
+        elif code[1].count("numpad") == 1:
+            self.text += code[1][6:].replace("decimal", ".")
+        elif texte == "1":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "1"
+            else:
+                self.text += "&"
+        elif texte == "2":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "2"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "~"
+            else:
+                self.text += "é"
+        elif texte == "3":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "3"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "#"
+            else:
+                self.text += '"'
+        elif texte == "4":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "4"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "{"
+            else:
+                self.text += "'"
+        elif texte == "5":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "5"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "["
+            else:
+                self.text += "("
+        elif texte == "6":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "6"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "|"
+            else:
+                self.text += "-"
+        elif texte == "7":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "7"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "`"
+            else:
+                self.text += "è"
+        elif texte == "8":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "8"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "\\"
+            else:
+                self.text += "_"
+        elif texte == "9":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "9"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "^"
+            else:
+                self.text += "ç"
+        elif texte == "0":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "0"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "@"
+            else:
+                self.text += "à"
+        elif texte == "°":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "°"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "]"
+            else:
+                self.text += ")"
+        elif texte == "+":
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                self.text += "+"
+            elif "ctrl" in modificateurs and "alt" in modificateurs:
+                self.text += "}"
+            else:
+                self.text += "="
         elif texte == None:
-            print("Code: ", code)
+            print("Code: ", code, modificateurs)
         else:
-            self.text += texte
+            if "capslock" in modificateurs or "shift" in modificateurs or "rshift" in modificateurs:
+                c = code[0]
+                if c == 59:
+                   self.text += "."
+                elif c == 33:
+                    self.text += "§"
+                elif c == 58:
+                    self.text += "/"
+                elif c == 44:
+                    self.text += "?"
+                else:
+                    self.text += texte.upper()
+            else:
+                self.text += texte
         if len(self.text) == 0:
             self.shown_text = self.placeholder
         elif self.password:
@@ -78,9 +180,9 @@ class HUD:
         self.boutons = []
         self.event = Clock.schedule_interval(self.actualiser, 1/20)  # 60 fps
 
-    def bind(self, emplacement, taille, action, type="Bouton"):
-        # print("Binding", action, 'sur x variant de', (emplacement[0]-(taille[0]//2), emplacement[0]+(taille[0]//2)), 'et y', (emplacement[1]-(taille[1]//2), emplacement[1]+(taille[1]//2)))
-        self.boutons.append({"type": type, "x": (emplacement[0]-(taille[0]//2), emplacement[0]+(taille[0]//2)), "y": (emplacement[1]-(taille[1]//2), emplacement[1]+(taille[1]//2)), "action": action})
+    def bind(self, x, y, tx, ty, action, type="Bouton"):
+        print("Binding", action, 'sur x variant de', (x-(tx//2), x+(tx//2)), 'et y', (y-(ty//2), y+(ty//2)))
+        self.boutons.append({"type": type, "x": (x-(tx//2), x+(tx//2)), "y": (y-(ty//2), y+(ty//2)), "action": action})
 
     def unbind(self, unbin="all"):
         if unbin == 'all':
@@ -103,11 +205,11 @@ class HUD:
     def recoordonner_double(self, tupl):
         return int((tupl[0] / 1000) * self.longueur), int((tupl[1] / 1000) * self.largeur), int((tupl[2] / 1000) * self.longueur), int((tupl[3] / 1000) * self.largeur)
 
-    def texte(self, x, y, texte, remove=True, color=(1, 1, 1, 1), taille_police=30):
+    def texte(self, x, y, texte, remove=True, color=(0, 1, 0, 1), taille_police=15, centrer=False):
         label = CoreLabel(text=str(texte), font_size=taille_police, color=color)
         label.refresh()
         text = label.texture
-        rec = Rectangle(size=text.size, pos=self.recoordonner((x - (text.size[0]//2), y - (text.size[1]//2))), texture=text)
+        rec = Rectangle(size=((len(texte)*5, text.size[1]) if centrer else text.size), pos=self.recoordonner((x, y - (text.size[1]//2))), texture=text)
         layout.canvas.add(rec)
         if remove:
             def rmv(dt):
@@ -129,13 +231,6 @@ class HUD:
 
     def actualiser(self, dt):
         self.longueur, self.largeur = Window.size
-
-
-if globals.mode == "DEV":
-    if globals.orientation == "portrait":
-        Window.size = globals.largeur_dev, globals.longueur_dev
-    else:
-        Window.size = globals.longueur_dev, globals.largeur_dev
 
 
 class Ecran(Widget):
@@ -160,10 +255,21 @@ class PROJETApp(MDApp):
         global layout
         self.title = 'PROJET'
         Window.clearcolor = (1, 1, 1, 1)
+        if globals.mode == "DEV":
+            if globals.orientation == "portrait":
+                Window.size = globals.largeur_dev, globals.longueur_dev
+            else:
+                Window.size = globals.longueur_dev, globals.largeur_dev
         layout = Ecran()
         globals.jeu.initialiser()
         return layout
 
 
 def start():
-    PROJETApp().run()
+    global APP
+    APP = PROJETApp()
+    APP.run()
+
+def stop(self):
+    global APP
+    APP.stop(self)
