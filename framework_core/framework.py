@@ -15,15 +15,17 @@ import globals
 class TextInput():
     liste = []
 
-    def __init__(self, x, y, tx, ty, placeholder, password=False, source="textinput"):
+    def __init__(self, x, y, tx, ty, placeholder, password=False, source="textinput", textcolor=(0, 1, 0, 1)):
         self.text = ""
         self.shown_text = placeholder
-        self.image = globals.images[source]
+        self.image = globals.images[source]["path"]
         self.id = len(TextInput.liste)
         TextInput.liste.append(self)
         self.action = "TextInput.liste["+str(self.id)+"].focus()"
-        globals.hud.bind((x, y), (tx, ty), self.action)
+        globals.hud.bind(x, y, tx, ty, self.action)
         self.clavier = None
+        self.sent = False
+        self.textcolor = textcolor
 
         self.x = x
         self.y = y
@@ -38,10 +40,11 @@ class TextInput():
 
     def actualiser(self, dt):
         globals.hud.image(self.x, self.y, self.tx, self.ty, self.image)
-        globals.hud.texte(self.x-(self.tx//5), self.y+(self.ty//10), self.shown_text)
+        globals.hud.texte(self.x, self.y, self.shown_text, color=self.textcolor, centrer=True)
 
     def focus(self):
         global layout
+        print("FOCUSING")
         self.clavier = Window.request_keyboard(self.unfocus, layout, 'text')
         self.clavier.bind(on_key_down=self.press)
 
@@ -181,7 +184,7 @@ class HUD:
         self.event = Clock.schedule_interval(self.actualiser, 1/20)  # 60 fps
 
     def bind(self, x, y, tx, ty, action, type="Bouton"):
-        print("Binding", action, 'sur x variant de', (x-(tx//2), x+(tx//2)), 'et y', (y-(ty//2), y+(ty//2)))
+        #print("Binding", action, 'sur x variant de', (x-(tx//2), x+(tx//2)), 'et y', (y-(ty//2), y+(ty//2)))
         self.boutons.append({"type": type, "x": (x-(tx//2), x+(tx//2)), "y": (y-(ty//2), y+(ty//2)), "action": action})
 
     def unbind(self, unbin="all"):
@@ -202,14 +205,12 @@ class HUD:
     def recoordonner(self, tupl):
         return int((tupl[0] / 1000) * self.longueur), int((tupl[1] / 1000) * self.largeur)
 
-    def recoordonner_double(self, tupl):
-        return int((tupl[0] / 1000) * self.longueur), int((tupl[1] / 1000) * self.largeur), int((tupl[2] / 1000) * self.longueur), int((tupl[3] / 1000) * self.largeur)
-
-    def texte(self, x, y, texte, remove=True, color=(0, 1, 0, 1), taille_police=15, centrer=False):
+    def texte(self, x, y, texte, remove=True, color=(0, 1, 0, 1), taille_police=15, centrer=False, grouper=False):
         label = CoreLabel(text=str(texte), font_size=taille_police, color=color)
         label.refresh()
         text = label.texture
-        rec = Rectangle(size=((len(texte)*5, text.size[1]) if centrer else text.size), pos=self.recoordonner((x, y - (text.size[1]//2))), texture=text)
+        size = ((len(texte)*(taille_police//3), text.size[1]) if grouper else text.size)
+        rec = Rectangle(size=size, pos=self.recoordonner((x - (size[0]//2 if centrer else 0), y - (text.size[1]//2))), texture=text)
         layout.canvas.add(rec)
         if remove:
             def rmv(dt):
